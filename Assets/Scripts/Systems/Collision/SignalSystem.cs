@@ -52,6 +52,7 @@ public partial struct SignalSystem : ISystem
             }
             for (int i = 0; i < listenerBuffer.Length; i++)
             {
+                UnityEngine.Debug.LogWarning("sig event listen buff");
                 if (Signals.TryGetSignalListener(listenerBuffer[i].listenerEntity, listenerLookup, out var listener))
                 {
                     listener.eventEntity = entity;

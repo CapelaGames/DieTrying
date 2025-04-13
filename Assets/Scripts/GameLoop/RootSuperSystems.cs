@@ -27,6 +27,7 @@ public partial class PreTransformsSuperSystem : RootSuperSystem
         GetOrCreateAndAddUnmanagedSystem<BodyVsBodySystem>();
         GetOrCreateAndAddUnmanagedSystem<BodyVsEnvironmentSystem>();
         GetOrCreateAndAddUnmanagedSystem<SolveBodiesSystem>();
+        GetOrCreateAndAddUnmanagedSystem<SignalSystem>();
     }
 }
 
