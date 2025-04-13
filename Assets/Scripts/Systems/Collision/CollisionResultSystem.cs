@@ -25,6 +25,7 @@ public partial struct CollisionResultSystem : ISystem
         //collision buffer vs everything else
         //plus self avoidance through a list of entities
         var staticEnvironmentCollisionLayer = latiosWorld.sceneBlackboardEntity.GetCollectionComponent<StaticEnvironmentCollisionLayer>().layer;
+        var bodyCollisionLayer = latiosWorld.sceneBlackboardEntity.GetCollectionComponent<RigidBodyCollisionLayer>().layer;
         //var ballCollisionLayer = latiosWorld.sceneBlackboardEntity.GetCollectionComponent<BallCollisionLayer>().layer;
         // var pinCollisionLayer = latiosWorld.sceneBlackboardEntity.GetCollectionComponent<PinCollisionLayer>().layer;
         //var collisionResultPinVsBallProcessor = new CollisionResultPinVsBallProcessor
@@ -41,10 +42,11 @@ public partial struct CollisionResultSystem : ISystem
             stayBufferPtrLookup = GetComponentLookup<CollisionResultStayBufferPtr>(),
             resultBufferLookup = GetBufferLookup<CollisionResultBufferElement>(false),
         };
+        state.Dependency = Physics.FindPairs(bodyCollisionLayer, staticEnvironmentCollisionLayer, collisionProcessor).ScheduleParallel(state.Dependency);
         //state.Dependency = PhysicsDebug.DrawFindPairs(pinCollisionLayer, ballCollisionLayer).ScheduleParallel(state.Dependency);
         // state.Dependency = Physics.FindPairs(pinCollisionLayer, ballCollisionLayer, collisionProcessor).ScheduleParallel(state.Dependency);
     }
-
+    //
     struct CollisionProcessor : IFindPairsProcessor
     {
         public PhysicsComponentLookup<RigidBody> bodyLookup;
