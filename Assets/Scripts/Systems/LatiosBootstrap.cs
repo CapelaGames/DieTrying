@@ -42,13 +42,13 @@ public class LatiosBootstrap : ICustomBootstrap
 {
     public bool Initialize(string defaultWorldName)
     {
-        var world                             = new LatiosWorld(defaultWorldName);
+        var world = new LatiosWorld(defaultWorldName);
         World.DefaultGameObjectInjectionWorld = world;
 
         var systems = DefaultWorldInitialization.GetAllSystemTypeIndices(WorldSystemFilterFlags.Default);
         BootstrapTools.InjectUnitySystems(systems, world, world.simulationSystemGroup);
 
-        //Latios.CoreBootstrap.InstallSceneManager(world);
+        Latios.CoreBootstrap.InstallSceneManager(world);
         Latios.Transforms.TransformsBootstrap.InstallTransforms(world, world.simulationSystemGroup);
         Latios.Myri.MyriBootstrap.InstallMyri(world);
         Latios.Kinemation.KinemationBootstrap.InstallKinemation(world);

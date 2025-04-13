@@ -13,7 +13,7 @@ public class RigidBodyAuthoring : MonoBehaviour
 {
     public float mass = 1f;
     [Range(0, 1)] public float coefficientOfFriction = 0.5f;
-    //[Range(0, 1)] public float coefficientOfRestitution = 0.5f;
+    [Range(0, 1)] public float coefficientOfRestitution = 0.5f;
     [Range(0, 1)] public float linearDamping = 0.05f;
     [Range(0, 1)] public float angularDamping = 0.05f;
     public bool ignoreGravity;
@@ -44,7 +44,7 @@ public class RigidBodyAuthoringBaker : Baker<RigidBodyAuthoring>
                 inverseMass = math.rcp(authoring.mass)
             },
             coefficientOfFriction = authoring.coefficientOfFriction,
-            coefficientOfRestitution = 0,
+            coefficientOfRestitution = authoring.coefficientOfRestitution,
             linearDamping = authoring.linearDamping,
             angularDamping = authoring.angularDamping,
             ignoreGravity = authoring.ignoreGravity,

@@ -650,7 +650,7 @@ MonoBehaviour:
   ignoreAngularZ: 0
   initialLinear:
     x: 0
-    y: 0
+    y: 3.25
     z: 0
   initialAngular:
     x: 0

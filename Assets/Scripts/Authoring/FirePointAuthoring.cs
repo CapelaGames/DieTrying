@@ -1,7 +1,23 @@
+using Latios;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
+
+// Post-Jam Notes:
+// These are the non-controller player components. Technically the character controller can be driven by an AI.
+// But these were exclusively for the player.
+public struct PlayerTag : IComponentData { }
+
+public struct GunFirer : IComponentData
+{
+    public EntityWith<FirstPersonDesiredActions> actionsEntity;
+    public EntityWith<Prefab> rigidBodyPrefab;
+    public float minScale;
+    public float scaleUpStartTime;
+    public float scaleUpEndTime;
+    public float exitVelocity;
+}
 
 // Post-Jam Notes:
 // This is the authoring for the very tip of the gun where blocks are spawned from.

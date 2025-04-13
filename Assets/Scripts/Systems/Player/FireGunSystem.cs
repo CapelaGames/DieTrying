@@ -48,20 +48,24 @@ public partial struct FireGunSystem : ISystem
             if (!actions.fire)
                 return;
 
-            var rigidBody = rigidBodyLookup[gun.rigidBodyPrefab];
-            rigidBody.velocity.linear = math.forward(transform.rotation) * gun.exitVelocity;
-            var prefabTransform = worldTransformLookup[gun.rigidBodyPrefab].worldTransform;
-            prefabTransform.position = transform.position;
-            var scale = prefabTransform.scale;
-            var animatedScale = new AnimatedScale
+            for (int x = 0; x < 20; x++)
             {
-                currentTime = 0f,
-                minScale = gun.minScale * scale,
-                scaleUpStartTime = gun.scaleUpStartTime,
-                scaleUpEndTime = gun.scaleUpEndTime,
-                targetScale = scale
-            };
-            icb.Add(gun.rigidBodyPrefab, rigidBody, animatedScale, transform);
+                var rigidBody = rigidBodyLookup[gun.rigidBodyPrefab];
+                rigidBody.velocity.linear = transform.forwardDirection * gun.exitVelocity;
+                var prefabTransform = worldTransformLookup[gun.rigidBodyPrefab].worldTransform;
+                prefabTransform.position = transform.position;
+                var scale = prefabTransform.scale;
+                var animatedScale = new AnimatedScale
+                {
+                    currentTime = 0f,
+                    minScale = gun.minScale * scale,
+                    scaleUpStartTime = gun.scaleUpStartTime,
+                    scaleUpEndTime = gun.scaleUpEndTime,
+                    targetScale = scale
+                };
+
+                icb.Add(gun.rigidBodyPrefab, rigidBody, animatedScale, transform);
+            }
         }
     }
 }

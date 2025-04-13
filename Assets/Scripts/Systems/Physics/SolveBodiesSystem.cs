@@ -215,7 +215,7 @@ public partial struct SolveBodiesSystem : ISystem
                                                              rigidBody.mass.inverseMass,
                                                              rigidBody.angularExpansion,
                                                              rigidBody.numOtherSignificantBodiesInContact,
-                                                             new float3(0f, timeScaledGravity, 0f),
+                                                             timestepScaledGravity,
                                                              gravityDir,
                                                              UnitySim.kDefaultVelocityClippingFactor,
                                                              UnitySim.kDefaultInertialScalingFactor,
@@ -231,30 +231,17 @@ public partial struct SolveBodiesSystem : ISystem
         public void Execute(TransformAspect transform, ref RigidBody rigidBody)
         {
             var previousInertialPose = rigidBody.inertialPoseWorldTransform;
-            if (!math.all(math.isfinite(rigidBody.velocity.linear)))
-                rigidBody.velocity.linear = float3.zero;
-            if (!math.all(math.isfinite(rigidBody.velocity.angular)))
-                rigidBody.velocity.angular = float3.zero;
+            if (!math.all(math.isfinite(rigidBody.velocity.linear))) rigidBody.velocity.linear = float3.zero;
+            if (!math.all(math.isfinite(rigidBody.velocity.angular))) rigidBody.velocity.angular = float3.zero;
             if (rigidBody.ignoreLinearMotion)
             {
                 rigidBody.velocity.linear.x = 0f;
                 rigidBody.velocity.linear.y = 0f;
+                rigidBody.velocity.linear.z = 0f;
             }
-            rigidBody.velocity.linear.z = 0f;
-
-            if (rigidBody.ignoreAngularX)
-            {
-                rigidBody.velocity.angular.x = 0f;
-            }
-            if (rigidBody.ignoreAngularY)
-            {
-                rigidBody.velocity.angular.y = 0f;
-            }
-            if (rigidBody.ignoreAngularZ)
-            {
-                rigidBody.velocity.angular.z = 0f;
-            }
-
+            rigidBody.velocity.angular.x = rigidBody.ignoreAngularX ? 0f : rigidBody.velocity.angular.x;
+            rigidBody.velocity.angular.y = rigidBody.ignoreAngularY ? 0f : rigidBody.velocity.angular.y;
+            rigidBody.velocity.angular.z = rigidBody.ignoreAngularZ ? 0f : rigidBody.velocity.angular.z;
 
             UnitySim.Integrate(ref rigidBody.inertialPoseWorldTransform, ref rigidBody.velocity, rigidBody.linearDamping, rigidBody.angularDamping, deltaTime);
             transform.worldTransform = UnitySim.ApplyInertialPoseWorldTransformDeltaToWorldTransform(transform.worldTransform,
