@@ -22,7 +22,8 @@ public class LatiosEditorBootstrap : ICustomEditorBootstrap
 {
     public World Initialize(string defaultEditorWorldName)
     {
-        var world = new LatiosWorld(defaultEditorWorldName, WorldFlags.Editor);
+        var world                        = new LatiosWorld(defaultEditorWorldName, WorldFlags.Editor);
+        world.useExplicitSystemOrdering  = true;
 
         var systems = DefaultWorldInitialization.GetAllSystemTypeIndices(WorldSystemFilterFlags.Default, true);
         BootstrapTools.InjectUnitySystems(systems, world, world.simulationSystemGroup);
@@ -31,7 +32,7 @@ public class LatiosEditorBootstrap : ICustomEditorBootstrap
         Latios.Kinemation.KinemationBootstrap.InstallKinemation(world);
         Latios.Calligraphics.CalligraphicsBootstrap.InstallCalligraphics(world);
 
-        BootstrapTools.InjectUserSystems(systems, world, world.simulationSystemGroup);
+        BootstrapTools.InjectRootSuperSystems(systems, world, world.simulationSystemGroup);
 
         return world;
     }
@@ -42,13 +43,15 @@ public class LatiosBootstrap : ICustomBootstrap
 {
     public bool Initialize(string defaultWorldName)
     {
-        var world = new LatiosWorld(defaultWorldName);
+        var world                             = new LatiosWorld(defaultWorldName);
         World.DefaultGameObjectInjectionWorld = world;
+        world.useExplicitSystemOrdering       = true;
 
         var systems = DefaultWorldInitialization.GetAllSystemTypeIndices(WorldSystemFilterFlags.Default);
+
         BootstrapTools.InjectUnitySystems(systems, world, world.simulationSystemGroup);
 
-        Latios.CoreBootstrap.InstallSceneManager(world);
+        //Latios.CoreBootstrap.InstallSceneManager(world);
         Latios.Transforms.TransformsBootstrap.InstallTransforms(world, world.simulationSystemGroup);
         Latios.Myri.MyriBootstrap.InstallMyri(world);
         Latios.Kinemation.KinemationBootstrap.InstallKinemation(world);
@@ -57,7 +60,7 @@ public class LatiosBootstrap : ICustomBootstrap
         Latios.Unika.UnikaBootstrap.InstallUnikaEntitySerialization(world);
         //Latios.LifeFX.LifeFXBootstrap.InstallLifeFX(world);
 
-        BootstrapTools.InjectUserSystems(systems, world, world.simulationSystemGroup);
+        BootstrapTools.InjectRootSuperSystems(systems, world, world.simulationSystemGroup);
 
         world.initializationSystemGroup.SortSystems();
         world.simulationSystemGroup.SortSystems();
